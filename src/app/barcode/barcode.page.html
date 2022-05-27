@@ -1,0 +1,100 @@
+<ion-header *ngIf="ActiveUser" class="ion-no-border">
+  <header class="flex p-4 items-center justify-between" style="display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 12px;">
+    <div class="flex items-center" style="display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;">
+      <img src="../../assets/patient-1.png" width="50px" />
+      <h3 class="text-sm m-0 ml-2" style="padding-left: 5px;">
+        <span class="text-xs">Welcome</span>,
+        <span><b> {{ActiveUser?.name}}</b></span>
+      </h3>
+    </div>
+    <!-- <div>
+      <ion-icon class="text-lg" name="notifications-outline"></ion-icon>
+    </div> -->
+  </header>
+</ion-header>
+
+<ion-content *ngIf="!fisherman">
+  <ion-card color="danger" style="    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    align-items: center;
+    justify-content: center;">
+    <ion-card-content>
+      <h1 style="
+        font-size: 2em !important;
+        color: #fff;
+        text-align: center;
+    ">Scan any QR first</h1>
+    </ion-card-content>
+    <ion-footer style="display: flex; justify-content: center;">
+      <ion-button (click)="scanBarcode()">Read New QR code</ion-button>
+    </ion-footer>
+  </ion-card>
+</ion-content>
+<ion-content *ngIf="fisherman">
+  <div class="fisherman">
+    <img src="../../assets/patient-1.png" width="150px" />
+    <h2>{{fisherman.name}}</h2>
+    <h4>#<span (click)="copy(fisherman.id)">{{fisherman.id}}</span></h4>
+  </div>
+  <div style="text-align: center; padding: 10px;">
+    <ion-button (click)="addItems(fisherman.id)" size="medium" color="primary">
+      Add Items
+    </ion-button>
+  </div>
+  <ion-card>
+    <ion-card-content>
+      <div class="dlist">
+        <span [ngStyle]="{'border-bottom':(photos==true)? '2px solid var(--ion-color-primary)': 'none'}"
+          (click)="func_photos($event)">Photos</span>
+        <span [ngStyle]="{'border-bottom':(items==true)? '2px solid var(--ion-color-primary)': 'none'}"
+          (click)="func_items($event)">Items</span>
+        <span [ngStyle]="{'border-bottom':(amounts==true)? '2px solid var(--ion-color-primary)': 'none'}"
+          (click)="func_amounts($event)">Amounts</span>
+      </div>
+      <div *ngIf="photos">
+        <ion-card style="box-shadow: none;">
+          <ion-card-content>
+            <div class="grid-container">
+              <div class="grid-item" *ngFor="let item of productimages; let index = index">
+                <!-- <img [src]="item"> -->
+                Image {{item}}
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+      <div *ngIf="items">
+        <ion-card style="box-shadow: none;">
+          <ion-card-content>
+            <div class="grid-containerI">
+              <div class="grid-item" *ngFor="let item of productimages; let index = index">
+                <!-- <img [src]="item"> -->
+                Item {{item}}
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+      <div *ngIf="amounts">
+        <ion-card style="box-shadow: none;">
+          <ion-card-content>
+            <div class="grid-container">
+              <div class="grid-item" *ngFor="let item of productimages; let index = index">
+                <!-- <img [src]="item"> -->
+                Amount {{item}}
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

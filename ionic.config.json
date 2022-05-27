@@ -1,0 +1,7 @@
+{
+  "name": "Ocean plastic",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
