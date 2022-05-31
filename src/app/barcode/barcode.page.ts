@@ -26,6 +26,9 @@ export class BarcodePage implements OnInit {
   photos = true;
   items = false;
   amounts = false;
+  wasteItemsList: any;
+  wasteCollected: any;
+  tempId = "6285c34e4108c2667cab6a3b";
   productimages = [1, 2, 3, 4, 5, 6, 7, 8, 9]
   constructor(private http: HttpClient,
     private barcodeScanner: BarcodeScanner,
@@ -45,6 +48,11 @@ export class BarcodePage implements OnInit {
       // this.ActiveUser.DOB = res.DOB;
       // this.ActiveUser.email = res.email;
       /*----------------- PATIENT LIST ------------------------------------*/
+    })
+    this.http.get(`${Urls.WLIST}?access_token=${this.user.id}`).subscribe((res) => {
+      this.wasteItemsList = res;
+      console.log(this.wasteItemsList)
+
     })
     console.log("Call scan")
     this.scanBarcode()
@@ -67,10 +75,10 @@ export class BarcodePage implements OnInit {
       console.log('Barcode data Scanned Id', barcodeData.text);
       console.log('Barcode data Scanned json', this.scannedData.name);
       console.log('Barcode data Scanned json', this.scannedData.id);
-      // this.callFisherman(this.scannedData.id);
+      this.callFisherman(this.scannedData.id);
     }).catch(err => {
       console.log('Error', err);
-      this.callFisherman('6285c34e4108c2667cab6a3b');
+      // this.callFisherman(this.tempId);
 
     });
   }
@@ -88,7 +96,10 @@ export class BarcodePage implements OnInit {
   }
   func_items(e) {
     console.log(e)
-
+    this.http.get(`${Urls.FISHERMAN}/${this.scannedData.id}/wasteCollecteds?access_token=${this.user.id}`).subscribe((res => {
+      console.log(res);
+      this.wasteCollected = res;
+    }))
     this.photos = false;
     this.items = true;
     this.amounts = false;
@@ -137,5 +148,11 @@ export class BarcodePage implements OnInit {
     });
     toast.present();
   }
-
+  doRefresh(event) {
+    this.ngOnInit();
+    setTimeout(() => {
+      console.log('Async operation has ended');
+      event.target.complete();
+    }, 2000);
+  }
 }

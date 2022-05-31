@@ -28,7 +28,7 @@
       </div>
     </div>
     <form #form="ngForm" (ngSubmit)="saveData(form)">
-      <ion-card *ngFor="let waste of wasteItemsList;let i=index">
+      <ion-card *ngFor="let waste of tmp;let i=index">
         <ion-card-content>
           <div class="grid-container">
             <div class="grid-item">
@@ -38,18 +38,26 @@
               {{waste.name}}
             </div>
             <div class="item-grid">
-              <ion-input style="margin-bottom: 5px;" [name]=waste.name type="number" placeholder="Weight"
-                ngModel="weight" ng-init="weight=1" required>
+              <ion-input style="margin-bottom: 5px;" name="weight" type="number" placeholder="Weight"
+                (ionChange)="chngeweight($event,i)" required>
               </ion-input>
+              <!-- <ion-input style="margin-bottom: 5px;" [value]="weight" type="number" placeholder="Weight"
+                (input)="weight=$event.target.value" ng-init="weight=1" required>
+              </ion-input> -->
             </div>
             <div class="item-grid">
-              <ion-input style="margin-bottom: 5px;" [name]="rate" type="number" placeholder="Rate" ngModel="rate"
-                ng-init="rate=2" required>
+              <ion-input style="margin-bottom: 5px;" name="rate" type="number" placeholder="Rate"
+                (ionChange)="chngerate($event,i)" required>
               </ion-input>
+              <!-- <ion-input style="margin-bottom: 5px;" [value]="rate" type="number" placeholder="Rate" (input)="rate=$event.target.value"
+                ng-init="rate=2" required>
+              </ion-input> -->
+
             </div>
           </div>
           <div>
-            Total = {{weight}}*{{rate}}
+            Total = {{waste.total}}
+            <!-- Total = {{waste.weight* waste.rate}} -->
           </div>
         </ion-card-content>
       </ion-card>
