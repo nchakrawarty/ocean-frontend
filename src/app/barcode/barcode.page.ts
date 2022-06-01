@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { ToastController, ModalController } from '@ionic/angular';
 import { Urls } from '../constants/urls';
 import { AddItemsPage } from '../add-items/add-items.page';
+import { AddAmountPage } from '../add-amount/add-amount.page';
 
 @Component({
   selector: 'app-barcode',
@@ -30,6 +31,8 @@ export class BarcodePage implements OnInit {
   wasteCollected: any;
   tempId = "6285c34e4108c2667cab6a3b";
   productimages = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+  transactions: any;
+  paid: any;
   constructor(private http: HttpClient,
     private barcodeScanner: BarcodeScanner,
     private datePipe: DatePipe,
@@ -75,10 +78,10 @@ export class BarcodePage implements OnInit {
       console.log('Barcode data Scanned Id', barcodeData.text);
       console.log('Barcode data Scanned json', this.scannedData.name);
       console.log('Barcode data Scanned json', this.scannedData.id);
-      this.callFisherman(this.scannedData.id);
+      // this.callFisherman(this.scannedData.id);
     }).catch(err => {
       console.log('Error', err);
-      // this.callFisherman(this.tempId);
+      this.callFisherman(this.tempId);
 
     });
   }
@@ -96,7 +99,7 @@ export class BarcodePage implements OnInit {
   }
   func_items(e) {
     console.log(e)
-    this.http.get(`${Urls.FISHERMAN}/${this.scannedData.id}/wasteCollecteds?access_token=${this.user.id}`).subscribe((res => {
+    this.http.get(`${Urls.FISHERMAN}/${this.tempId}/wasteCollecteds?access_token=${this.user.id}`).subscribe((res => {
       console.log(res);
       this.wasteCollected = res;
     }))
@@ -105,11 +108,44 @@ export class BarcodePage implements OnInit {
     this.amounts = false;
   }
   func_amounts(e) {
-    console.log(e)
-
+    this.paid = 0;
+    console.log(e, this.wasteCollected)
+    if (this.wasteCollected == undefined) {
+      this.http.get(`${Urls.FISHERMAN}/${this.tempId}/wasteCollecteds?access_token=${this.user.id}`).subscribe((res => {
+        console.log(res);
+        this.wasteCollected = res;
+        this.calcttl()
+      }))
+    }
+    this.http.get(`${Urls.FISHERMAN}/${this.tempId}/transactions?access_token=${this.user.id}`).subscribe((res => {
+      console.log(res);
+      this.transactions = res;
+      this.transactions.forEach(element => {
+        element.amount.forEach(amt => {
+          this.paid = this.paid + amt.Amount;
+        });
+      });
+      this.calcttl()
+    }))
     this.photos = false;
     this.items = false;
     this.amounts = true;
+  }
+  Balance: any;
+  calcttl() {
+    if (this.wasteCollected != undefined && this.transactions != undefined) {
+      // var ttl = 0;
+      // this.wasteCollected.forEach(element => {
+      //   ttl = ttl + element.total;
+      // });
+      // console.log(ttl)
+      // this.Balance = ttl;
+      this.http.get(`${Urls.FISHERMAN}/${this.tempId}/transactions?access_token=${this.user.id}`).subscribe(((res: any) => {
+        console.log(res);
+        this.Balance = res[0].balance;
+        // this.calcttl()
+      }))
+    }
   }
   copy(fid) {
     console.log(fid)
@@ -135,9 +171,24 @@ export class BarcodePage implements OnInit {
       component: AddItemsPage,
       componentProps: [fid, this.user]
     });
+    modal.onDidDismiss().then((data) => {
+      console.log(data)
+      this.ngOnInit()
+    });
     return await modal.present();
   }
-
+  async addAmounts(fid) {
+    console.log(fid)
+    const modal = await this.modalController.create({
+      component: AddAmountPage,
+      componentProps: [fid, this.user]
+    });
+    modal.onDidDismiss().then((data) => {
+      console.log(data)
+      this.ngOnInit()
+    });
+    return await modal.present();
+  }
   async presentToast(d, c) {
     const toast = await this.toastController.create({
       message: d,

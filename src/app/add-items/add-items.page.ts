@@ -76,7 +76,7 @@ export class AddItemsPage implements OnInit {
   }
   saveData(data) {
     console.log(this.tmp)
-
+    var ttl = 0;
     // console.log(data)
     // tempWaste = this.wasteItemsList;
     // this.wasteItemsList.forEach((element, i) => {
@@ -108,8 +108,43 @@ export class AddItemsPage implements OnInit {
       })
         .subscribe(res => {
           console.log(res);
+
         });
+      ttl = ttl + element.total;
+      console.log(element.total)
+
+
     });
+    // console.log(ttl)
+    this.http.get(`${Urls.FISHERMAN}/${this.navParams.data[0]}/transactions?access_token=${this.navParams.data[1].id}`).subscribe(((res: any) => {
+      console.log(res, res.length);
+      // res[0].balance = res[0].balance + element.total;
+      if (res.length == 0) {
+        this.http.post(`${Urls.FISHERMAN}/${this.navParams.data[0]}/transactions?access_token=${this.navParams.data[1].id}`,
+          {
+            "balance": ttl,
+            "amount": [
+
+            ],
+            "fishermanId": this.fisherman.id
+          }
+        ).subscribe(((res: any) => {
+          console.log(res)
+
+        }))
+      } else {
+        ttl = ttl + res[0].balance;
+        this.http.patch(`${Urls.TRANSACTION}/${res[0].id}?access_token=${this.navParams.data[1].id}`,
+          {
+            "balance": ttl
+          }
+        ).subscribe(((res: any) => {
+          console.log(res)
+
+        }))
+      }
+
+    }))
     this.closeModalNodata()
   }
   async closeModalNodata() {

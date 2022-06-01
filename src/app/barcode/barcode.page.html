@@ -97,14 +97,45 @@
         </ion-card>
       </div>
       <div *ngIf="amounts">
-        <ion-card style="box-shadow: none;">
+        <ion-card style="min-height: 50px;">
+          <ion-card-content style="display: flex;
+          justify-content: space-evenly;">
+            <div>
+              Paid Rs. {{paid}}
+            </div>
+            <div>
+              Balance Rs.{{Balance}}
+            </div>
+          </ion-card-content>
+        </ion-card>
+        <ion-card style="min-height: 50px;">
           <ion-card-content>
-            <div class="grid-container">
-              <div class="grid-item" *ngFor="let item of productimages; let index = index">
-                <!-- <img [src]="item"> -->
-                Amount {{item}}
+            <div style="display: flex;
+         justify-content: space-evenly; align-items: center;">
+              <div>
+                Transaction details
+              </div>
+              <div>
+                <ion-button (click)="addAmounts(fisherman.id)" size="small" color="primary">Pay</ion-button>
               </div>
             </div>
+            <div class="grid-containerI" *ngFor="let item of transactions; let index = index">
+              <div *ngFor="let amt of item.amount;let index=inndex">
+                <div class="grid-item">
+                  <!-- <img [src]="item"> -->
+                  Date {{amt.transactionDate}} | Amount = {{amt.Amount}}
+                  <div>
+                  </div>
+
+
+                </div>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+        <ion-card style="box-shadow: none;">
+          <ion-card-content>
+
           </ion-card-content>
         </ion-card>
       </div>

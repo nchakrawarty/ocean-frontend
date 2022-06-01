@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Add Transaction</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content *ngIf="fisherman">
+  <div class="fisherman">
+    <img src="../../assets/patient-1.png" width="150px" />
+    <h2>{{fisherman.name}}</h2>
+    <h4>#<span>{{fisherman.id}}</span></h4>
+  </div>
+  <ion-card style="min-height: 50px;">
+    <ion-card-content style="display: flex;
+    justify-content: space-evenly;">
+      <div>
+        Paid Rs. {{paid}}
+      </div>
+      <div>
+        Balance Rs.{{Balance}}
+      </div>
+    </ion-card-content>
+  </ion-card>
+  <ion-card>
+    <ion-card-content>
+      <form #form="ngForm" (ngSubmit)="addAmount(form)" style="padding: 5px; width: 85%">
+        <ion-input class="bg-white rounded-lg text-sm overflow-hidden mb-3" name="Amount" type="number"
+          placeholder="Enter Amount" ngModel required>
+        </ion-input>
+        <div style="display: flex; align-items: center">
+          <ion-icon size="large" name="calendar"></ion-icon>
+          <ion-datetime displayFormat="MMM DD, YYYY" name="transactionDate" placeholder="Date" ngModel>
+          </ion-datetime>
+        </div>
+        <ion-button mode="ios" color="primary" size="medium" type="submit" [disabled]="form.invalid" expand="block">
+          Add transaction
+        </ion-button>
+
+      </form>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
