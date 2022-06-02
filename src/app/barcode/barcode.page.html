@@ -111,7 +111,7 @@
         <ion-card style="min-height: 50px;">
           <ion-card-content>
             <div style="display: flex;
-         justify-content: space-evenly; align-items: center;">
+         justify-content: space-evenly; align-items: center; padding: 4px; background-color: #efefef;">
               <div>
                 Transaction details
               </div>
@@ -119,15 +119,26 @@
                 <ion-button (click)="addAmounts(fisherman.id)" size="small" color="primary">Pay</ion-button>
               </div>
             </div>
-            <div class="grid-containerI" *ngFor="let item of transactions; let index = index">
+            <div *ngFor="let item of transactions; let index = index">
+              <div style="display: flex;justify-content: space-between; padding: 4px; background-color: beige;">
+                <!-- <img [src]="item"> -->
+                <div>
+                  Date
+                </div>
+                <div>
+                  Amount
+                </div>
+              </div>
               <div *ngFor="let amt of item.amount;let index=inndex">
-                <div class="grid-item">
+                <div style="display: flex;justify-content: space-between;">
                   <!-- <img [src]="item"> -->
-                  Date {{amt.transactionDate}} | Amount = {{amt.Amount}}
                   <div>
+                    <!-- <time datetime="YYYY-MM-DD"></time> -->
+                    {{amt.transactionDate}}
                   </div>
-
-
+                  <div>
+                    {{amt.Amount}}
+                  </div>
                 </div>
               </div>
             </div>

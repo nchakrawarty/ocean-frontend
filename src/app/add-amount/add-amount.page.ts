@@ -21,6 +21,7 @@ export class AddAmountPage implements OnInit {
   transactions: any;
   wasteCollected: any;
   paid: any;
+  amount: [{}];
   // tempWaste: any;
   constructor(
     private modalController: ModalController,
@@ -51,6 +52,7 @@ export class AddAmountPage implements OnInit {
     this.http.get(`${Urls.FISHERMAN}/${this.navParams.data[0]}/transactions?access_token=${this.navParams.data[1].id}`).subscribe(((res: any) => {
       console.log(res);
       this.transactions = res;
+      this.amount = this.transactions[0].amount;
       this.transactions.forEach(element => {
         element.amount.forEach(amt => {
           this.paid = this.paid + amt.Amount;
@@ -70,6 +72,7 @@ export class AddAmountPage implements OnInit {
       //   ttl = ttl + element.total;
       // });
       // console.log(ttl)
+      this.amount = this.transactions[0].amount;
       this.http.get(`${Urls.FISHERMAN}/${this.navParams.data[0]}/transactions?access_token=${this.navParams.data[1].id}`).subscribe(((res: any) => {
         console.log(res);
         this.transactions.forEach(element => {
@@ -85,18 +88,26 @@ export class AddAmountPage implements OnInit {
   }
 
   addAmount(data) {
+    var obj = {
+      "Amount": data.form.value.Amount, "transactionDate": data.form.value.transactionDate
+    }
+    this.amount.push(obj)
+    // console.log(this.amount)
+    // console.log(this.amount.push(obj))
+
+    // this.amount = this.amount.splice(obj)
     var ttl = 0;
     ttl = this.transactions[0].balance - data.form.value.Amount;
     console.log(data.form.value)
     if (this.Balance) {
+      // console.log({
+      //   "balance": ttl,
+      //   "amount": this.amount
+      // }, this.transactions)
       this.http.patch(`${Urls.TRANSACTION}/${this.transactions[0].id}?access_token=${this.navParams.data[1].id}`,
         {
           "balance": ttl,
-          "amount": [{
-            "Amount": data.form.value.Amount, "transactionDate": data.form.value.transactionDate
-          }
-
-          ]
+          "amount": this.amount
         }
       ).subscribe(((res: any) => {
         console.log(res)
