@@ -120,25 +120,27 @@
               </div>
             </div>
             <div *ngFor="let item of transactions; let index = index">
-              <div style="display: flex;justify-content: space-between; padding: 4px; background-color: beige;">
+              <div style="display: flex;justify-content: space-around; padding: 4px; background-color: beige;">
                 <!-- <img [src]="item"> -->
-                <div>
+                <h4>
                   Date
-                </div>
-                <div>
+                </h4>
+                <h4>
                   Amount
-                </div>
+                </h4>
               </div>
               <div *ngFor="let amt of item.amount;let index=inndex">
-                <div style="display: flex;justify-content: space-between;">
+                <div color="primary"
+                  style="display: flex;justify-content: space-around;align-items: center; margin: 1px;background-color: #f8f6f6;padding: 5px;">
                   <!-- <img [src]="item"> -->
-                  <div>
+                  <h4>
                     <!-- <time datetime="YYYY-MM-DD"></time> -->
-                    {{amt.transactionDate}}
-                  </div>
-                  <div>
-                    {{amt.Amount}}
-                  </div>
+                    {{amt.transactionDate | date:'dd-MM-yyyy'}}
+                  </h4>
+                  <h4>
+                    Rs. {{amt.Amount}}<br>
+                    <span style="font-size: 10px">At {{amt.transactionDate | date:'hh:mm'}}</span>
+                  </h4>
                 </div>
               </div>
             </div>

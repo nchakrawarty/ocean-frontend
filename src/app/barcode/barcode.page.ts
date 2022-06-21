@@ -80,10 +80,10 @@ export class BarcodePage implements OnInit {
       console.log('Barcode data Scanned Id', barcodeData.text);
       console.log('Barcode data Scanned json', this.scannedData.name);
       console.log('Barcode data Scanned json', this.scannedData.id);
-      this.callFisherman(this.scannedData.id);
+      // this.callFisherman(this.scannedData.id);
     }).catch(err => {
       console.log('Error', err);
-      // this.callFisherman(this.tempId);
+      this.callFisherman(this.tempId);
 
     });
   }
@@ -101,7 +101,7 @@ export class BarcodePage implements OnInit {
   }
   func_items(e) {
     console.log(e)
-    this.http.get(`${Urls.FISHERMAN}/${this.scannedData.id}/wasteCollecteds?access_token=${this.user.id}`).subscribe((res => {
+    this.http.get(`${Urls.FISHERMAN}/${this.tempId}/wasteCollecteds?access_token=${this.user.id}`).subscribe((res => {
       console.log(res);
       this.wasteCollected = res;
     }))
@@ -113,13 +113,13 @@ export class BarcodePage implements OnInit {
     this.paid = 0;
     console.log(e, this.wasteCollected)
     if (this.wasteCollected == undefined) {
-      this.http.get(`${Urls.FISHERMAN}/${this.scannedData.id}/wasteCollecteds?access_token=${this.user.id}`).subscribe((res => {
+      this.http.get(`${Urls.FISHERMAN}/${this.tempId}/wasteCollecteds?access_token=${this.user.id}`).subscribe((res => {
         console.log(res);
         this.wasteCollected = res;
         this.calcttl()
       }))
     }
-    this.http.get(`${Urls.FISHERMAN}/${this.scannedData.id}/transactions?access_token=${this.user.id}`).subscribe((res => {
+    this.http.get(`${Urls.FISHERMAN}/${this.tempId}/transactions?access_token=${this.user.id}`).subscribe((res => {
       console.log(res);
       this.transactions = res;
       this.transactions.forEach(element => {
@@ -142,7 +142,7 @@ export class BarcodePage implements OnInit {
       // });
       // console.log(ttl)
       // this.Balance = ttl;
-      this.http.get(`${Urls.FISHERMAN}/${this.scannedData.id}/transactions?access_token=${this.user.id}`).subscribe(((res: any) => {
+      this.http.get(`${Urls.FISHERMAN}/${this.tempId}/transactions?access_token=${this.user.id}`).subscribe(((res: any) => {
         console.log(res);
         this.Balance = res[0].balance;
         // this.calcttl()
